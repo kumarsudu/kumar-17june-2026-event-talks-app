@@ -129,6 +129,13 @@ function setupEventListeners() {
 
     // Tweet Share Action
     sendTweetBtn.addEventListener('click', publishTweet);
+
+    // Close modal on Escape key press (UX Best Practice)
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && tweetModal.classList.contains('open')) {
+            closeTweetModal();
+        }
+    });
 }
 
 // Fetch Notes from Backend
@@ -278,9 +285,13 @@ function renderNotes(notes) {
                 </div>
             </div>
             
-            <div class="note-body">
+            <div class="note-body collapsed">
                 ${note.html}
+                <div class="note-fade-overlay"></div>
             </div>
+            <button class="btn-read-more" title="Read More">
+                Read More <i class="fa-solid fa-angle-down"></i>
+            </button>
             
             <div class="note-footer">
                 <a href="${note.link}" target="_blank" class="doc-link" rel="noopener noreferrer">
@@ -313,6 +324,32 @@ function renderNotes(notes) {
             const update = updatesState.find(u => u.id === updateId);
             if (update) {
                 copyToClipboard(update, btn);
+            }
+        });
+    });
+
+    // Read More height checks and collapse toggle (UX Best Practice)
+    document.querySelectorAll('.note-body').forEach(body => {
+        if (body.scrollHeight > 180) {
+            body.classList.add('long-content');
+            const btn = body.nextElementSibling;
+            if (btn && btn.classList.contains('btn-read-more')) {
+                btn.style.display = 'inline-flex';
+            }
+        }
+    });
+
+    document.querySelectorAll('.btn-read-more').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const body = btn.previousElementSibling;
+            if (body.classList.contains('collapsed')) {
+                body.classList.remove('collapsed');
+                btn.innerHTML = `Read Less <i class="fa-solid fa-angle-up"></i>`;
+            } else {
+                body.classList.add('collapsed');
+                btn.innerHTML = `Read More <i class="fa-solid fa-angle-down"></i>`;
+                // Smooth scroll back to card top
+                btn.closest('.note-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         });
     });
@@ -354,7 +391,7 @@ function setRefreshingIcon(isRefreshing) {
 
 // UI State Switchers
 function showLoading() {
-    loadingState.style.display = 'flex';
+    loadingState.style.display = 'grid';
     notesGrid.style.display = 'none';
     errorState.style.display = 'none';
     emptyState.style.display = 'none';
@@ -483,6 +520,9 @@ function copyToClipboard(update, btn) {
         btn.classList.add('copied');
         btn.title = 'Copied!';
         
+        // Show floating toast notification (UX Best Practice)
+        showToast('Copied update to clipboard!');
+        
         // Revert after 1.5 seconds
         setTimeout(() => {
             icon.className = 'fa-regular fa-copy';
@@ -492,6 +532,31 @@ function copyToClipboard(update, btn) {
     }).catch(err => {
         console.error('Failed to copy text: ', err);
     });
+}
+
+// Show a floating toast notification banner (UX Best Practice)
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${message}</span>`;
+    
+    container.appendChild(toast);
+    
+    // Animate transition in
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    // Remove toast after 2.5 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            container.removeChild(toast);
+        }, 300);
+    }, 2500);
 }
 
 // Export filtered release notes to CSV file

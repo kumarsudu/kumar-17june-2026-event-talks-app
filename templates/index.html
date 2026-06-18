@@ -102,13 +102,35 @@
 
         <!-- Main Content (Feed) -->
         <main class="feed-container">
-            <!-- Loading State -->
-            <div id="loading-state" class="loading-state">
-                <div class="spinner-container">
-                    <div class="double-bounce1"></div>
-                    <div class="double-bounce2"></div>
+            <!-- Loading State (Skeleton Cards) -->
+            <div id="loading-state" class="skeleton-grid" style="display: none;">
+                <div class="skeleton-card">
+                    <div class="skeleton-header">
+                        <div class="skeleton-badge"></div>
+                        <div class="skeleton-date"></div>
+                    </div>
+                    <div class="skeleton-line line-1"></div>
+                    <div class="skeleton-line line-2"></div>
+                    <div class="skeleton-line line-3"></div>
                 </div>
-                <p>Fetching latest BigQuery release notes...</p>
+                <div class="skeleton-card">
+                    <div class="skeleton-header">
+                        <div class="skeleton-badge"></div>
+                        <div class="skeleton-date"></div>
+                    </div>
+                    <div class="skeleton-line line-1"></div>
+                    <div class="skeleton-line line-2"></div>
+                    <div class="skeleton-line line-3"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-header">
+                        <div class="skeleton-badge"></div>
+                        <div class="skeleton-date"></div>
+                    </div>
+                    <div class="skeleton-line line-1"></div>
+                    <div class="skeleton-line line-2"></div>
+                    <div class="skeleton-line line-3"></div>
+                </div>
             </div>
 
             <!-- Error State -->
@@ -178,6 +200,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
