@@ -82,13 +82,18 @@
                 <button id="clear-search" class="clear-btn" style="display: none;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div class="filter-chips" id="filter-container">
-                <button class="chip active" data-type="all">All Updates</button>
-                <button class="chip" data-type="Feature">Features</button>
-                <button class="chip" data-type="Announcement">Announcements</button>
-                <button class="chip" data-type="Change">Changes</button>
-                <button class="chip" data-type="Breaking">Breaking</button>
-                <button class="chip" data-type="Issue">Issues</button>
+            <div class="filter-row">
+                <div class="filter-chips" id="filter-container">
+                    <button class="chip active" data-type="all">All Updates</button>
+                    <button class="chip" data-type="Feature">Features</button>
+                    <button class="chip" data-type="Announcement">Announcements</button>
+                    <button class="chip" data-type="Change">Changes</button>
+                    <button class="chip" data-type="Breaking">Breaking</button>
+                    <button class="chip" data-type="Issue">Issues</button>
+                </div>
+                <button id="export-csv-btn" class="btn btn-secondary btn-sm" title="Export Current View to CSV">
+                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
             </div>
         </section>
 

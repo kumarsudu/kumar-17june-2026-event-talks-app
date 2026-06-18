@@ -377,6 +377,21 @@ body {
     color: white;
 }
 
+.filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+
 .filter-chips {
     display: flex;
     flex-wrap: wrap;
@@ -621,6 +636,10 @@ body {
 .action-icon-btn:hover {
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.05);
+}
+
+.action-icon-btn.copied {
+    color: #10b981 !important;
 }
 
 /* Card Body Content */

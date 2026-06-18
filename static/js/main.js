@@ -21,6 +21,7 @@ const resetFiltersBtn = document.getElementById('reset-filters-btn');
 const searchInput = document.getElementById('search-input');
 const clearSearchBtn = document.getElementById('clear-search');
 const filterChips = document.querySelectorAll('.chip');
+const exportCsvBtn = document.getElementById('export-csv-btn');
 const tweetModal = document.getElementById('tweet-modal');
 const closeModalBtn = document.getElementById('close-modal');
 const cancelTweetBtn = document.getElementById('cancel-tweet');
@@ -98,6 +99,11 @@ function setupEventListeners() {
             }
         });
     });
+
+    // Export CSV Button
+    if (exportCsvBtn) {
+        exportCsvBtn.addEventListener('click', exportToCSV);
+    }
 
     // Tweet Modal Close Events
     closeModalBtn.addEventListener('click', closeTweetModal);
@@ -255,6 +261,9 @@ function renderNotes(notes) {
                     <span class="note-date"><i class="fa-regular fa-calendar"></i> ${note.date}</span>
                 </div>
                 <div class="note-actions-top">
+                    <button class="action-icon-btn copy-note-btn" data-id="${note.id}" title="Copy Update to Clipboard">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
                     <a href="${note.link}" target="_blank" class="action-icon-btn" title="View Source Release Notes" rel="noopener noreferrer">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </a>
@@ -285,6 +294,17 @@ function renderNotes(notes) {
             const update = updatesState.find(u => u.id === updateId);
             if (update) {
                 openTweetModal(update);
+            }
+        });
+    });
+
+    // Add event listeners to the copy buttons
+    document.querySelectorAll('.copy-note-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const updateId = btn.getAttribute('data-id');
+            const update = updatesState.find(u => u.id === updateId);
+            if (update) {
+                copyToClipboard(update, btn);
             }
         });
     });
@@ -442,4 +462,78 @@ function publishTweet() {
     
     // Close modal
     closeTweetModal();
+}
+
+// Copy update details to clipboard
+function copyToClipboard(update, btn) {
+    const textToCopy = `[BigQuery ${update.type}] (${update.date})\n${update.text}\nSource: ${update.link}`;
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        // Change icon and add copied class
+        const icon = btn.querySelector('i');
+        icon.className = 'fa-solid fa-check';
+        btn.classList.add('copied');
+        btn.title = 'Copied!';
+        
+        // Revert after 1.5 seconds
+        setTimeout(() => {
+            icon.className = 'fa-regular fa-copy';
+            btn.classList.remove('copied');
+            btn.title = 'Copy Update to Clipboard';
+        }, 1500);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+// Export filtered release notes to CSV file
+function exportToCSV() {
+    if (filteredUpdates.length === 0) {
+        alert('No updates found to export.');
+        return;
+    }
+    
+    // CSV headers
+    const headers = ['Date', 'Type', 'Link', 'Description'];
+    
+    // Format rows
+    const rows = filteredUpdates.map(update => {
+        // Helper to escape double quotes in CSV fields
+        const escapeCSVField = (field) => {
+            if (field === null || field === undefined) return '';
+            const stringified = String(field);
+            if (stringified.includes('"') || stringified.includes(',') || stringified.includes('\n') || stringified.includes('\r')) {
+                return `"${stringified.replace(/"/g, '""')}"`;
+            }
+            return stringified;
+        };
+        
+        return [
+            escapeCSVField(update.date),
+            escapeCSVField(update.type),
+            escapeCSVField(update.link),
+            escapeCSVField(update.text)
+        ];
+    });
+    
+    // Combine headers and rows
+    const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+    ].join('\n');
+    
+    // Create Blob and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    // Format current date for filename
+    const dateStr = new Date().toISOString().slice(0, 10);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `bigquery_release_notes_${dateStr}.csv`);
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
