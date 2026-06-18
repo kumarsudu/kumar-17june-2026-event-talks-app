@@ -22,6 +22,8 @@ const searchInput = document.getElementById('search-input');
 const clearSearchBtn = document.getElementById('clear-search');
 const filterChips = document.querySelectorAll('.chip');
 const exportCsvBtn = document.getElementById('export-csv-btn');
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
 const tweetModal = document.getElementById('tweet-modal');
 const closeModalBtn = document.getElementById('close-modal');
 const cancelTweetBtn = document.getElementById('cancel-tweet');
@@ -41,12 +43,18 @@ const statCards = document.querySelectorAll('.stat-card');
 
 // Load initial data
 document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
     fetchReleaseNotes(false);
     setupEventListeners();
 });
 
 // Setup Event Listeners
 function setupEventListeners() {
+    // Theme Toggle Button
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
     // Refresh Button
     refreshBtn.addEventListener('click', () => {
         fetchReleaseNotes(true);
@@ -536,4 +544,41 @@ function exportToCSV() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+// Initialize Active Theme on startup
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.remove('dark-theme');
+        document.body.classList.add('light-theme');
+        if (themeIcon) {
+            themeIcon.className = 'fa-solid fa-moon';
+        }
+    } else {
+        document.body.classList.remove('light-theme');
+        document.body.classList.add('dark-theme');
+        if (themeIcon) {
+            themeIcon.className = 'fa-solid fa-sun';
+        }
+    }
+}
+
+// Toggle Theme between light and dark
+function toggleTheme() {
+    if (document.body.classList.contains('dark-theme')) {
+        document.body.classList.remove('dark-theme');
+        document.body.classList.add('light-theme');
+        if (themeIcon) {
+            themeIcon.className = 'fa-solid fa-moon';
+        }
+        localStorage.setItem('theme', 'light');
+    } else {
+        document.body.classList.remove('light-theme');
+        document.body.classList.add('dark-theme');
+        if (themeIcon) {
+            themeIcon.className = 'fa-solid fa-sun';
+        }
+        localStorage.setItem('theme', 'dark');
+    }
 }
