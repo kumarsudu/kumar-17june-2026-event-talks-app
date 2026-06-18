@@ -1,6 +1,11 @@
 # BigQuery Release Notes Hub 🚀
 
-A modern, high-fidelity web application built with **Python Flask** and **plain vanilla HTML, CSS, and JavaScript**. This application fetches the official BigQuery release notes Atom feed, splits the aggregated daily release entries into granular, category-specific updates, and displays them in a premium glassmorphic dashboard. It also features a built-in Tweet Composer that lets you easily customize and share specific updates directly to X (formerly Twitter).
+[![Built with Antigravity CLI](https://img.shields.io/badge/Built%20with-Antigravity%20CLI-blueviolet?style=for-the-badge&logo=google-cloud)](https://medium.com/google-cloud/antigravity-cli-tutorial-series-12b46cfe3bf2)
+
+A modern, high-fidelity web application built with **Python Flask** and **plain vanilla HTML, CSS, and JavaScript**. 
+
+> [!NOTE]
+> **Built with Antigravity CLI**: This entire project—including server-side logic scaffolding, stylesheet structures, interactive client mechanics, best-practice UX implementations, and Git version control deployments—was designed, built, and synced entirely using the **Antigravity CLI**.
 
 ---
 
