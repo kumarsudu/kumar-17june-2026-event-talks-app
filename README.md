@@ -9,11 +9,14 @@ A modern, high-fidelity web application built with **Python Flask** and **plain 
 * **Granular Release Note Splitting**: Aggregated daily updates from the feed are automatically parsed and grouped into individual cards categorized as `Feature`, `Announcement`, `Change`, `Breaking`, or `Issue`.
 * **Fuzzy Live Search**: Instantly find updates by searching through text descriptions, titles, dates, or update categories.
 * **Dynamic Category Filters**: Filter updates by clicking custom category chips or the top statistics summary cards.
-* **Premium Dark Mode Design**: Visually stunning UI featuring frosted glassmorphic card layouts, curated color systems, and ambient glow backdrops.
+* **Ambient Glow Themes & Mode Toggle**: Frosted glassmorphic card layouts with custom background blur blobs. Includes a **Light/Dark Mode toggle switch** in the header that overrides CSS variables and saves preferences to `localStorage`.
+* **Shimmering Skeleton Screens**: Replaces basic loading spinners with glowing card structures during background syncs to improve perceived latency.
 * **Integrated Tweet Composer**:
   * Easily customize tweets for any specific update.
   * Live character counter that highlights warning boundaries (280-char limit) and accurately accounts for Twitter's 23-character URL formatting.
   * Direct Twitter Web Intent integration (no API setup required).
+* **📋 Copy to Clipboard**: Quick-copy formatted card text (Title, Date, Description, Source URL) with animated ticks and floating toast notification banners.
+* **📊 Export to CSV**: Client-side utility that compiles and downloads the *currently filtered or searched* feed entries as an escaped `.csv` spreadsheet.
 * **Caching Layer**: Includes a 5-minute server-side in-memory caching mechanism to optimize feed fetching, with a force-refresh manual update control.
 
 ---
